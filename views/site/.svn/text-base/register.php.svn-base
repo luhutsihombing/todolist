@@ -1,0 +1,125 @@
+<?php
+/**
+ * index.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, https://github.com/p2made, 2015
+ * @author Pedro Plowman
+ * @package p2made/yii2-sb-admin-theme
+ * @license MIT
+ */
+
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
+
+//asset
+use app\assets\RegisterAsset;
+use app\assets\JqueryStepAsset;
+
+JqueryStepAsset::register($this);
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+// being really pedantic about asset order...
+p2made\theme\sbAdmin\web\SBAdmin2Asset::register($this);
+RegisterAsset::register($this);
+
+Yii::$app->getSession()->getFlash('success');
+?>
+<div id="content-register" style="height: 2000px">
+        <?php $form = ActiveForm::begin(['validateOnType' => true]); ?>
+        <div id="company-registration-form">
+            <h3>Company Administrator Information</h3>
+            <section>
+                <div id="form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?= $form->field($modelUser, 'firstName')->textInput(array('placeholder' => 'First Name')); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= $form->field($modelUser, 'middleName')->textInput(array('placeholder' => 'Middle Name')); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?= $form->field($modelUser, 'lastName')->textInput(array('placeholder' => 'Last Name')); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'email')->textInput(array('placeholder' => 'ex. Joseph@indivara.com')); ?>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'password')->passwordInput(array(
+                            'placeholder' => 'Password', 'id' => 'user-password'
+                        )); ?>
+                        <label id="lbl_show"><input type="checkbox" id="show_pass"> Show Password</label>
+                        <div id="pass_info">
+                            <h5>Password must meet the following requirements:</h5>
+                            <ul>
+                                <li id="letter" class="invalid"><i class="glyphicon glyphicon-remove" id="letter_remove"></i><i class="glyphicon glyphicon-ok" id="letter_ok"></i> At least <strong>one special character</strong></li>
+                                <li id="capital" class="invalid"><i class="glyphicon glyphicon-remove" id="capital_remove"></i><i class="glyphicon glyphicon-ok" id="capital_ok"></i> At least <strong>one capital letter</strong></li>
+                                <li id="number" class="invalid"><i class="glyphicon glyphicon-remove" id="number_remove"></i><i class="glyphicon glyphicon-ok" id="number_ok"></i> At least <strong>one number</strong></li>
+                                <li id="length" class="invalid"><i class="glyphicon glyphicon-remove" id="length_remove"></i><i class="glyphicon glyphicon-ok" id="length_ok"></i> Be at least <strong>6 characters</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <?= $form->field($modelUser, 'password_repeat')->passwordInput()->label('Confirm Password') ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'addressStreet')->textInput(array('placeholder' => 'ex. Mampang Prapatan Raya 3'))->label('Address'); ?>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'addressCity')->textInput(array('placeholder' => 'ex. Surabaya'))->label('City'); ?>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'addressCountry')->textInput(array('placeholder' => 'ex. Indonesia'))->label('Country'); ?>
+                    </div>
+                    <div class="row">
+                        <?= $form->field($modelUser, 'phone')->textInput(array('placeholder' => 'ex. 081287848247')); ?>
+                    </div>
+                    <div class="row" id="divMandatory">
+                        <strong><span style="color: red;">*</span> Mandatory</strong>
+                    </div>
+                </div>
+            </section>
+            <h3>Company Registration</h3>
+            <section style="padding-left: 70px">
+                    <div id="form">
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyName')
+                                ->textInput(array('placeholder' => 'ex. Indivara Sejahtera Sukses Makmur')) ?>
+                        </div>
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyEmail')->textInput(array('placeholder' => 'ex. resourcing@indivara.com')); ?>
+                        </div>
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyAddress')->textInput(array('placeholder' => 'ex. Batu Tulis No 3')); ?>
+                        </div>
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyCity')->textInput(array('placeholder' => 'ex. Jakarta')); ?>
+                        </div>
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyCountry')->textInput(array('placeholder' => 'ex. Indonesia')); ?>
+                        </div>
+                        <div class="row">
+                            <?= $form->field($modelCompany, 'companyPhone')->textInput(array('placeholder' => 'ex. 021123123')); ?>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row" id="div-register-company-mandatory">
+                            <strong><span style="color: red;">*</span> Mandatory</strong>
+                        </div>
+                        <div class="row" id="div-register-company-mandatory">
+                            <strong><span style="color: red;">Click on Captcha Image to generate new Captcha</span></strong>
+                        </div>
+                        <div class="row" id="div-register-company-mandatory">
+                            <?= $form->field($modelUser, 'captcha')->widget(\yii\captcha\Captcha::className()) ?>
+                        </div>
+                        <div class="row" id="div-register-company-mandatory">
+                            <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'id' => 'btnRegister', 'style' => 'width:100%']) ?>
+                        </div>
+                    </div>
+            </section>
+        </div>
+    <?php ActiveForm::end(); ?>
+</div><!-- /#content-wrapper -->

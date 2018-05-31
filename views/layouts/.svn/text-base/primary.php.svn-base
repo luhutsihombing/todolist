@@ -1,0 +1,135 @@
+<?php
+/**
+ * primary.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, https://github.com/p2made, 2015
+ * @author Pedro Plowman
+ * @package p2made/yii2-sb-admin-theme
+ * @license MIT
+ */
+
+use app\assets\AppAsset;
+use yii\helpers\Html;
+use app\models\Userconfirmation;
+p2made\theme\sbAdmin\web\SBAdmin2Asset::register($this);
+$modelConfirmation = new Userconfirmation();
+/* @var $this \yii\web\View */
+/* @var $content string */
+?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+	<?= $this->render('html-header.php', []) ?>
+<body>
+	<?php $this->beginBody() ?>
+	<div class="wrapper">
+
+		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; height: 50px;">
+
+			<?= $this->render('navigation-top.php', []) ?>
+
+			<?= $this->render('navigation-left.php', []) ?>
+
+		</nav>
+
+		<?= $this->render('content.php', ['content' => $content]) ?>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Register</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?= Html::beginForm(Yii::$app->request->getBaseUrl().'/user-confirmation/create','POST') ?>
+                            <div>
+                                <div class="alert alert-info" role="alert">
+                                    <p><b>Did you know?</b></p>
+                                    You can register yourself as an individual by choosing <i><b>freelancer</b></i> on <b>type</b> field!
+                                </div>
+                                <div class="form-group">
+                                    <!--<label for="type">Email</label>-->
+                                    <?= Html::activeDropDownList($modelConfirmation,'type',['---Select Type---','freelancer','company'],['id' => 'types' , 'class' => 'form-control']) ?>
+                                    <span class="error" id="errType"></span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group" id="emailDiv">
+                                    <label for="email">Email</label>
+                                    <?= Html::activeInput('text', $modelConfirmation,'email',['class' => 'form-control'])?>
+                                    <?= Html::error($modelConfirmation,'email') ?>
+                                </div>
+                            </div>
+                            <div id="firstnameDiv">
+                                <div class="form-group">
+                                    <label for="firstname">Firstname</label>
+                                    <?= Html::activeInput('text', $modelConfirmation,'firstname',['class' => 'form-control', 'id'=> 'firstname'])?>
+                                    <?= Html::error($modelConfirmation,'firstname') ?>
+                                </div>
+                            </div>
+                            <div id="lastnameDiv">
+                                <div class="form-group">
+                                    <label for="email">Lastname</label>
+                                    <?= Html::activeInput('text', $modelConfirmation,'lastname',['class' => 'form-control','id' => 'lastname'])?>
+                                    <?= Html::error($modelConfirmation,'lastname') ?>
+                                </div>
+                            </div>
+                            <div id="companyDiv">
+                                <div class="form-group">
+                                    <label for="email">Company Name</label>
+                                    <?= Html::input('text','companyName',null,['class' => 'form-control','id' => 'companyname']) ?>
+                                    <?= Html::error($modelConfirmation,'email') ?>
+                                </div>
+                            </div>
+                            <div id="submitButton">
+                                <?= Html::submitButton('Submit', ['class' => 'btn btn-success', 'style' => 'width: 100%']) ?>
+                            </div>
+                        <?= Html::endForm() ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+	</div>
+    <?php
+        $registerScript = <<<JS
+                            $('#firstnameDiv').hide();
+                            $('#lastnameDiv').hide();
+                            $('#companyDiv').hide();
+                            $('#emailDiv').hide();
+                            $('#submitButton').hide();
+                        $('#types').on('change', function(){
+                                    //document.getElementById('typeHiddenInput').value = this.value;
+                                    if(this.value == 1){
+                                        $('#emailDiv').show();
+                                        $('#firstnameDiv').show();
+                                        $('#lastnameDiv').show();
+                                        $('#submitButton').show();
+                                        $('#companyDiv').hide();
+                                    }else if(this.value == 2){
+                                        $('#emailDiv').show();
+                                        $('#firstnameDiv').hide();
+                                        $('#lastnameDiv').hide();
+                                        $('#companyDiv').show();
+                                        $('#submitButton').show();
+                                    }else{
+                                        $('#firstnameDiv').hide();
+                                        $('#lastnameDiv').hide();
+                                        $('#companyDiv').hide();
+                                        $('#emailDiv').hide();
+                                        $('#submitButton').hide();
+                                    }
+                        });
+
+JS;
+
+
+        $this->registerJs($registerScript);
+
+    ?>
+	<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

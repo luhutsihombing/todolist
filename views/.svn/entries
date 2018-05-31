@@ -1,0 +1,103 @@
+10
+
+dir
+2076
+http://svn.jatis.com/PS_Resourcing/Branch/ResourcingSystem-Basic/views
+http://svn.jatis.com/PS_Resourcing
+
+
+
+2016-06-17T07:37:57.751191Z
+2075
+ahmad.awaludin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9a6afe06-917f-4a56-8ee2-1eb022d9cf5c
+
+userindustry
+dir
+
+industry
+dir
+
+rating
+dir
+
+skillprofession
+dir
+
+notification
+dir
+
+profession
+dir
+
+resource
+dir
+
+rrf
+dir
+
+auth-item
+dir
+
+extendresource
+dir
+
+layouts
+dir
+
+lov
+dir
+
+resourcerrf
+dir
+
+user-confirmation
+dir
+
+user-admin
+dir
+
+site
+dir
+
+project
+dir
+
+company
+dir
+
+publishedjob
+dir
+
+report
+dir
+
+bookedresource
+dir
+
+detailrrf
+dir
+
+auth-item-child
+dir
+
+skill
+dir
+
+user
+dir
+

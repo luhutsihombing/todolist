@@ -1,0 +1,465 @@
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+<style type="text/css">
+    .jobadvert td{
+        padding: 2px !important;
+    }
+</style>
+
+<?php
+/**
+ * index.php
+ *
+ * @copyright Copyright &copy; Pedro Plowman, https://github.com/p2made, 2015
+ * @author Pedro Plowman
+ * @package p2made/yii2-sb-admin-theme
+ * @license MIT
+ */
+
+use yii\helpers\Html;
+use yii\helpers\BaseUrl;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Json;
+
+
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+
+$this->title = 'Dashboard';
+
+// being really pedantic about asset order...
+p2made\theme\sbAdmin\web\SBAdmin2Asset::register($this);
+
+?>
+<?php
+//USER VIEW
+$listJob =Json::decode($listJobs, true);
+
+if(Yii::$app->user->isGuest == false){
+//ADMIN VIEW
+$listBanner = Json::decode($banner, true);
+?>
+
+<div id="content-wrapper">
+<?php
+if ($role == "super-admin" or $role == "admin"){ ?>
+<!-- ADMIN VIEW -->
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-archive fa-4x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= $listBanner[0] ?></div>
+                        <div>Ongoing Projects</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <a data-toggle="modal" data-target="#onGoingProjectModal">
+                 <div class="panel-footer">
+                     <span class="pull-left">View Details</span>
+                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                     <div class="clearfix"></div>
+                 </div>
+             </a>-->
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-laptop fa-4x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= $listBanner[1] ?></div>
+                        <div>Techincal Team</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-line-chart fa-4x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= $listBanner[2] ?></div>
+                        <div>Functional Team</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-user fa-4x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= $listBanner[3] ?></div>
+                        <div>Project Manager</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.row -->
+</div><!-- /#content-wrapper -->
+
+<div class="row" style="padding-top: 20px">
+    <div class="container-fluid" style="height: 50%;">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-bar-chart-o"></i> Resource Chart</div>
+                <div id="resourceschart" style="height: 250px;"></div>
+                <?php
+                $resource = Json::decode($countResource, true);
+                if(count($resource) == 0)
+                {
+                    ?>
+                    <div>
+                        <p id="p-chart" style="margin-left: 30%">No Resource Found</p>
+                    </div>
+                    <?php
+                }
+                else{
+                ?>
+                <script>
+                    new Morris.Donut({
+                        element: 'resourceschart',
+                        data: [
+                            <?php
+                                $totalResource=count($resource);
+                                for($x=0; $x<$totalResource; $x++){
+                                    if($x==$totalResource-1)
+                                    {
+                            ?>
+                            {value: <?=$resource[$x]['total']?>, label: '<?=$resource[$x]['userStatus']?>'}
+                            <?php
+                                    }
+                                else{
+                            ?>
+                            {value: <?=$resource[$x]['total']?>, label: '<?=$resource[$x]['userStatus']?>'},
+                            <?php
+                                    }
+                                }
+                             ?>
+                        ],
+                        formatter: function (x) {
+                            return x + " person(s)"
+                        }
+                    }).on('click', function (i, row) {
+                            console.log(i, row);
+                        });
+                </script>
+                <?php } ?>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-bar-chart-o"></i> Project Chart</div>
+                <div id="projectchart" style="height: 250px;"></div>
+                <?php
+                $project = Json::decode($countProject, true);
+                if(count($project)==0)
+                {
+                    ?>
+                    <div>
+                        <p id="p-chart" style="margin-left: 21%">No Assigned Resource Found</p>
+                    </div>
+                    <?php
+                }
+                else{
+                ?>
+                <script>
+                    new Morris.Donut({
+                        element: 'projectchart',
+                        data: [
+                            <?php
+                                $totalProject=count($project);
+                                for($x=0; $x<$totalProject; $x++){
+                                    if($x==$totalProject-1)
+                                    {
+                            ?>
+                            {value: <?=$project[$x]['total']?>, label: '<?=$project[$x]['projectName']?>'}
+                            <?php
+                                    }
+                                else{
+                            ?>
+                            {value: <?=$project[$x]['total']?>, label: '<?=$project[$x]['projectName']?>'},
+                            <?php
+                                    }
+                                }
+                             ?>
+                        ],
+                        formatter: function (x) {
+                            return x + " Person(s)"
+                        }
+                    }).on('click', function (i, row) {
+                            console.log(i, row);
+                        });
+                </script>
+                <?php } ?>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="fa fa-bar-chart-o"></i> RRF Chart</div>
+                <div id="rrfchart" style="height: 250px;"></div>
+                <?php
+                $rrf = Json::decode($countRRF, true);
+                if(count($rrf) == 0)
+                {
+                    ?>
+                    <div>
+                        <p id="p-chart" style="margin-left: 35%">No RRF Found</p>
+                    </div>
+                    <?php
+                }
+                else{
+                ?>
+                <script>
+                    new Morris.Donut({
+                        element: 'rrfchart',
+                        data: [
+                            {value: <?=$rrf['0']?>, label: 'Open'},
+                            {value: <?=$rrf['1']?>, label: 'Close'},
+                            {value: <?=$rrf['2']?>, label: 'Cancelled'},
+                            {value: <?=$rrf['3']?>, label: 'Expired'}
+                        ],
+                        formatter: function (x) {
+                            return x + " %"
+                        }
+                    }).on('click', function (i, row) {
+                            console.log(i, row);
+                        });
+                </script>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+    <?php }
+    }?>
+
+    <!-- USER VIEW -->
+    <div class="panel panel-primary" style="overflow: auto;">
+        <div class="panel-heading">Job Advert</div>
+        <div class="panel-body">
+            <table class="table table-hover table-bordered" style="margin-top: 0px;">
+                <tbody>
+                <?php
+                if($listJob == NULL)
+                {
+                    ?>
+                    <well class="col-md-offset-5">Job vacancy is not available</well>
+                    <?php
+                }
+                $count = count($listJob);
+                for($x=0; $x<$count; $x++) {
+                    ?>
+                    <tr>
+                        <td colspan="4">
+                            <div class="row">
+                                <div class="col-md-2" style="padding: 30px 0 0 6%; color: #3b5998">
+                                    <?php
+                                    switch($listJob[$x]['industryName'])
+                                    {
+                                        case "Banking" : ?> <i class="fa fa-bank fa-5x" id="Banking"></i> <?php break;?>
+                                        <?php case "Transportation" : ?> <i class="fa fa-car fa-5x" id="Transportation"></i> <?php break;?>
+                                    <?php case "Hospital" : ?> <i class="fa fa-hospital-o fa-5x" id="Hospital"></i> <?php break;?>
+                                    <?php case "Education" : ?> <i class="fa fa-book fa-5x" id="Education"></i> <?php break;?>
+                                    <?php case "E-Commerce" : ?> <i class="fa fa-shopping-cart fa-5x" id="E-Commerce"></i> <?php break;?>
+                                    <?php case "Trading" : ?> <i class="fa fa-money fa-5x" id="Trading"></i> <?php break;?>
+                                    <?php case "Goverment" : ?> <i class="fa fa-building fa-5x" id="Goverment"></i> <?php break;?>
+                                    <?php case "Human Resource" : ?> <i class="fa fa-user fa-5x" id="Human Resource"></i> <?php break;?>
+                                    <?php case "Security" : ?> <i class="fa fa-unloack-alt fa-5x" id="Security"></i> <?php break;?>
+                                    <?php case "Manufacturing" : ?> <i class="fa fa-insdurty fa-5x" id="Manufacturing"></i> <?php break;?>
+                                    <?php case "Payroll" : ?> <i class="fa fa-credit-card fa-5x" id="Payroll"></i> <?php break;?>
+                                    <?php case "Management" : ?> <i class="fa fa-list-ol fa-5x" id="Management"></i> <?php break;?>
+                                    <?php case "Airlines" : ?> <i class="fa fa-plane fa-5x" id="Airlines"></i> <?php break;?>
+                                    <?php case "Social Media" : ?> <i class="fa fa-users fa-5x" id="Social Media"></i> <?php break;?>
+                                    <?php case "Communication" : ?> <i class="fa fa-phone-square fa-5x" id="Communication"></i> <?php break;?>
+                                    <?php default : ?> <i class="fa fa-question-circle fa-5x" id="icon"></i>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                                <div class="col-md-9">
+                                    <?php
+                                    $result = new \app\models\customQueries\publishjobManagement();
+                                    $profName = $result->findProfessionName($listJob[$x]['professionId']);
+                                    $skillName = $result->findSkillName($listJob[$x]['skillId']);
+                                    ?>
+                                    
+
+                                    <?php 
+                                        if(empty(\Yii::$app->controller->userType)){
+                                            echo "<div><h3>".$profName['professionName']."</h3></div>";
+                                        }
+                                        else if(\Yii::$app->controller->userType=="freelancer" or \Yii::$app->controller->userType=="external"){
+                                            echo "<div><h3>".$profName['professionName']."</h3></div>";
+                                        }
+                                        else if(\Yii::$app->controller->userType != "freelancer" or \Yii::$app->controller->userType != "external"){
+                                            echo "<div><h3>".$listJob[$x]['projectName']."</h3></div>
+                                                <div style='color:indianred'>".$listJob[$x]['projectClient']."</div>";
+                                        }
+                                    ?>
+                                    <div style="padding-top: 15px">
+                                        <table class="jobadvert">
+                                        <tr>
+                                            <td><strong>Project Date</strong></td>
+                                            <td>:</td>
+                                            <td><?php echo date_format(date_create($listJob[$x]['projectStartDate']), 'Y-m-d')?> <strong>to</strong> <?php echo date_format(date_create($listJob[$x]['projectEndDate']), 'Y-m-d')?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Location</strong></td>
+                                            <td>:</td>
+                                            <td><?= $listJob[$x]['projectLocation'] ?></td>
+                                        </tr>
+                                        <?php 
+                                        if(\Yii::$app->controller->userType =="external" 
+                                            or \Yii::$app->controller->userType =="freelancer"
+                                            or \ Yii::$app->controller->role == null){
+
+                                        } else {
+                                        echo "
+                                        <tr>
+                                            <td><strong>Profession</strong></td>
+                                            <td>:</td>
+                                            <td>".$profName['professionName']."</td>
+                                        </tr>";
+                                        }
+                                        ?>
+                                        <tr>
+                                            <td><strong>Skill</strong></td>
+                                            <td>:</td>
+                                            <td><?=$skillName['skillName']?></td>
+                                        </tr>
+                                        </table>
+                                        <br>
+                                        <a href="<?php echo BaseUrl::Base();?>/bidding/place-new-bid?jobId=<?=$listJob[$x]['id']?>"><input type="button" value="Place New Bid"></a>&nbsp;&nbsp;
+                                        <a data-toggle="modal" data-target="#detailJobModal" data-job="<?=$listJob[$x]['id']?>" data-industry="<?=$listJob[$x]['industryName']?>" href="#"><input type="button" value="Detail"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+            </table>
+
+            <!-- Detail Job Modal -->
+            <div class="modal fade" id="detailJobModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="padding:35px 50px;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4><span class="glyphicon glyphicon-briefcase"></span> Job Detail</h4>
+                        </div>
+                        <div class="modal-body" id="modal-detail-job">
+                            <div class="container-fluid" style="width: 100%">
+                                <div class="row" id="modal-job-header">
+                                    <div class="col-md-2">
+                                        <span id="modal-icon" style="margin-top: 30px;color: #3b5998;"></span>
+                                    </div>
+                                    <div class="col-md-9" style="padding-left: 40px">
+                                        <h3 id="projectName"></h3>
+                                        <span id="project-client" style="color:indianred"></span>
+                                        <h4><span class="label label-success"><span id="profName"></span></span><span style="margin-left: 10px" class="label label-info"><span id="skillName"></span></span></h4></div>
+                                </div>
+                            </div>
+                            <div class="row" id="modal-job-body">
+                                <table class="jobadvert">
+                                    <tr>
+                                        <td><strong>Project Date</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            <span id="startDate"></span> <strong>to</strong> <span id="endDate">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Location</strong></td>
+                                        <td>:</td>
+                                        <td><span id="location"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Payment</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            <span id="currencyType"></span> <span id="salary"></span> / <span id="paymentType"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Description</strong></td>
+                                        <td>:</td>
+                                        <td><span id="description"></span></td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <input type="button" value="Place New Bid"></input>&nbsp;&nbsp;
+                                       
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<?php
+$script = <<<JS
+$('#detailJobModal').on('show.bs.modal', function (event) {
+        var tr = $(event.relatedTarget);
+        var jobId = tr.data('job');
+        var industry = tr.data('industry');
+        var modal_icon = document.getElementById(industry).getAttribute('class');
+        $.get('site/open-modal', {jobId : jobId},function(data){
+            var result = $.parseJSON(data);
+            document.getElementById("modal-icon").setAttribute('class',modal_icon);
+            document.getElementById("projectName").innerHTML = result[0].projectName;
+            document.getElementById("project-client").innerHTML = result[0].projectClient;
+            var startDate = result[0].projectStartDate;
+            document.getElementById("startDate").innerHTML = startDate.substr(0,10);
+            var endDate = result[0].projectEndDate;
+            document.getElementById("endDate").innerHTML = endDate.substr(0,10);
+            document.getElementById("location").innerHTML = result[0].projectLocation;
+            document.getElementById("paymentType").innerHTML = result[0].paymentType;
+            document.getElementById("currencyType").innerHTML = result[0].currencyType;
+            document.getElementById("salary").innerHTML = result[0].salary;
+            document.getElementById("description").innerHTML = result[0].description;
+            document.getElementById("profName").innerHTML = result[0].professionName;
+            document.getElementById("skillName").innerHTML = result[0].skillName;
+        });
+    })
+
+$('#detailJobModal').on('hidden.bs.modal', function (e) {
+  //location.reload();
+  e.preventDefault();
+});
+
+JS;
+$this->registerJs($script);
+?>

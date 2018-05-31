@@ -1,0 +1,55 @@
+<?php
+
+/* @var $this yii\web\View */
+/* @var $name string */
+/* @var $message string */
+/* @var $exception Exception */
+
+p2made\theme\sbAdmin\web\SBAdmin2Asset::register($this);
+
+use yii\helpers\Html;
+
+?>
+<div class="site-error">
+    <div class="jumbotron">
+        <div class="container" style="max-width: 100%">
+            <p>
+                This is an error message of <kbd><b><?=$name?></b></kbd>.
+                Este es un mensaje de error de <kbd><b><?=$name?></b></kbd>.
+                <kbd><b><?=$name?></b></kbd> هذه رسالة خطأ.
+                Ini adalah pesan kesalahan dari <kbd><b><?=$name?></b></kbd>.
+                Dies ist eine Fehlermeldung von <kbd><b><?=$name?></b></kbd>.
+                これは、<kbd><b><?=$name?></b></kbd>のエラーメッセージです.
+                Si tratta di un messaggio di errore di <kbd><b><?=$name?></b></kbd>.
+                Iki pesen kesalahan ing <kbd><b><?=$name?></b></kbd>.
+                이 <kbd><b><?=$name?></b></kbd> 의 오류 메시지입니다.
+                Hoc errore sermonis <kbd><b><?=$name?></b></kbd>.
+                ນີ້ແມ່ນຂໍ້ຄວາມຜິດພາດເປັນຂອງ <kbd><b><?=$name?></b></kbd>.
+                Ini adalah mesej memberitahu bahawa <kbd><b><?=$name?></b></kbd>.
+                这是页<kbd><b><?=$name?></b></kbd>错误信息.
+                Esta é uma mensagem de erro de <kbd><b><?=$name?></b></kbd>.
+                Ky është një mesazh gabimi prej  <kbd><b><?=$name?></b></kbd>.
+            </p>
+            <h1 style="padding-bottom: 20px"><kbd><b><?=$name?></b></kbd></h1>
+            <p>
+                Это сообщение об ошибке из <kbd><b><?=$name?></b></kbd>.
+                Detta är ett felmeddelande av <kbd><b><?=$name?></b></kbd>.
+                இந்த <kbd><b><?=$name?></b></kbd> ஒரு பிழை செய்தி வருகிறது.
+                Bu <kbd><b><?=$name?></b></kbd> bir hata mesajı.
+                Це повідомлення про помилку з <kbd><b><?=$name?></b></kbd>.
+                Đây là một thông báo lỗi của <kbd><b><?=$name?></b></kbd>.
+                <kbd><b><?=$name?></b></kbd> דאס איז אַ טעות אָנזאָג פון.
+                Ito ay isang mensahe ng error ng <kbd><b><?=$name?></b></kbd>.
+                Ceci est un message d'erreur de <kbd><b><?=$name?></b></kbd>.
+                นี่คือข้อผิดพลาดของ <kbd><b><?=$name?></b></kbd>.
+                Dit is een foutmelding van <kbd><b><?=$name?></b></kbd>.
+                Αυτό είναι ένα μήνυμα σφάλματος <kbd><b><?=$name?></b></kbd>.
+                Dette er en fejlmeddelelse på  <kbd><b><?=$name?></b></kbd>.
+                Qhov no yog ib qho kev ua yuam kev cov lus ntawm <kbd><b><?=$name?></b></kbd>.
+                Ieu hiji talatah error ti <kbd><b><?=$name?></b></kbd>.
+            </p>
+        </div>
+    </div>
+</div>
+
+</div>
